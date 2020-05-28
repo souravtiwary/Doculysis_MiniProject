@@ -21,7 +21,7 @@ public class genre_option extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_option);
 
-        btn_loadfileforgenreoption = findViewById(R.id.btn_urlforgenreoption);
+        btn_loadfileforgenreoption = findViewById(R.id.btn_loadfileforgenreoption);
 
         btn_loadfileforgenreoption.setOnClickListener(new View.OnClickListener() {
             @Override

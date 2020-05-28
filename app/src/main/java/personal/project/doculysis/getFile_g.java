@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,19 +27,28 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class getFile_g extends AppCompatActivity implements View.OnClickListener {
 
     private Button btn_getGenre;
     private TextView textView_genre_result;
+    public String text;
+
 
     public String path = null;
+    public String ans=null;
     private static final int PERMISSION_REQUEST_STORAGE = 1000;
     private static final int READ_REQUEST_CODE = 42;
-
+    summary_option.SummaryTool summaryTool;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getgenrefromfile);
+        summaryTool=new summary_option.SummaryTool();
 
         //request Permission
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -65,6 +75,14 @@ public class getFile_g extends AppCompatActivity implements View.OnClickListener
                 performFileSearch();
                 break;
             case R.id.btn_get_genre_result:
+                summaryTool.init();
+                summaryTool.extractSentenceFromContext(path);
+                summaryTool.groupSentencesIntoParagraphs();
+                summaryTool.createIntersectionMatrix();
+                summaryTool.createDictionary();
+                summaryTool.createSummary();
+                 ans=summaryTool.printSummary();
+
                 getFileGenre();
                 break;
         }
@@ -78,7 +96,7 @@ public class getFile_g extends AppCompatActivity implements View.OnClickListener
 
 
         JsonObjectRequest jsonobjectRequest = new JsonObjectRequest(Request.Method.GET,
-                "https://api.meaningcloud.com/class-1.1?key=86fc19c7e512d729752be51058ead27d&doc=" + path + "&model=IPTC_en" ,
+                "https://api.meaningcloud.com/class-1.1?key=86fc19c7e512d729752be51058ead27d&txt=" + ans + "&model=IPTC_en" ,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -126,7 +144,7 @@ public class getFile_g extends AppCompatActivity implements View.OnClickListener
                 assert path != null;
                 path = path.substring(path.indexOf(":") + 1);
                 Toast.makeText(this, "" + path, Toast.LENGTH_SHORT).show();
-
+                  readText(path);
                 if (path != null) {
                     btn_getGenre.setEnabled(true);
                 }
@@ -147,6 +165,28 @@ public class getFile_g extends AppCompatActivity implements View.OnClickListener
             }
         }
     }
+    private void readText(String  input)
+    {
+        File file=new File(Environment.getExternalStorageDirectory(),input);
+        StringBuilder txt=new StringBuilder();
+        //text=new StringBuilder();
+        try{
+            BufferedReader br=new BufferedReader(new FileReader(file));
+            String line;
+            while((line=br.readLine())!=null)
+            {
+                txt.append(line);
+                txt.append("\n");
 
+            }
+            br.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+         text=txt.toString();
+        Log.d("myTag",text.toString());
+    }
 
 }

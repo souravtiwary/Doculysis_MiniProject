@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 
 import personal.project.doculysis.operation_genre.genre_option;
-import personal.project.doculysis.operations_summary.summary_option;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
