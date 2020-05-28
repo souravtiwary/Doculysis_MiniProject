@@ -1,4 +1,4 @@
-package personal.project.doculysis;
+package personal.project.doculysis.readappkication;
 
 import java.util.Comparator;
 

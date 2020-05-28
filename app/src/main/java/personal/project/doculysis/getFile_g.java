@@ -1,12 +1,10 @@
 package personal.project.doculysis;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,97 +14,84 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.StringTokenizer;
 
-public class getFile_g extends AppCompatActivity implements View.OnClickListener {
+import personal.project.doculysis.readappkication.Summary;
+import personal.project.doculysis.readappkication.SummaryTool;
 
-    private Button btn_getGenre;
+public class getFile_g extends AppCompatActivity  {
+
+    private Button btn_load_file_result_g;
+    private Button btn_get_genre_result;
     private TextView textView_genre_result;
-    public String text;
+    SummaryTool summaryTool = new SummaryTool();
 
+    String textFromFile =null;
+    StringBuilder sb = new StringBuilder();
+    String numberofsent =String.valueOf(5);
 
+    private static final int PERMISSION_REQUEST_STORAGE=1000;
+    private static final int READ_REQUEST_CODE=42;
     public String path = null;
-    public String ans=null;
-    private static final int PERMISSION_REQUEST_STORAGE = 1000;
-    private static final int READ_REQUEST_CODE = 42;
-    summary_option.SummaryTool summaryTool;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getgenrefromfile);
-        summaryTool=new summary_option.SummaryTool();
 
-        //request Permission
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_STORAGE);
-        }
-
-
-        Button btn_loadFile = findViewById(R.id.btn_load_file_result_g);
-        btn_loadFile.setOnClickListener(this);
-
-        btn_getGenre = findViewById(R.id.btn_get_genre_result);
-
+        btn_get_genre_result = findViewById(R.id.btn_get_genre_result);
+        btn_load_file_result_g = findViewById(R.id.btn_load_file_result_g);
         textView_genre_result = findViewById(R.id.textView_genre_result);
-    }
 
-
-
-
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btn_load_file_result_g:
+        btn_load_file_result_g.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 performFileSearch();
-                break;
-            case R.id.btn_get_genre_result:
-                summaryTool.init();
-                summaryTool.extractSentenceFromContext(path);
-                summaryTool.groupSentencesIntoParagraphs();
-                summaryTool.createIntersectionMatrix();
-                summaryTool.createDictionary();
-                summaryTool.createSummary();
-                 ans=summaryTool.printSummary();
+            }
+        });
 
-                getFileGenre();
-                break;
-        }
+        btn_get_genre_result.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSummary();
+                getGenreofFile();
+            }
+        });
+
+
     }
 
-
-    private void getFileGenre() {
-
+    private void getGenreofFile() {
         RequestQueue requestQueue;
         requestQueue = Volley.newRequestQueue(this);
 
 
         JsonObjectRequest jsonobjectRequest = new JsonObjectRequest(Request.Method.GET,
-                "https://api.meaningcloud.com/class-1.1?key=86fc19c7e512d729752be51058ead27d&txt=" + ans + "&model=IPTC_en" ,
+                "https://api.meaningcloud.com/class-1.1?key=86fc19c7e512d729752be51058ead27d&txt=" + textFromFile + "&model=IPTC_en" ,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
 
-                            String x;
+                            StringBuilder sb = new StringBuilder();
                             Log.d("InsideLoad", "onResponse: " + response.getString("category_list"));
-                            x = (response.getString("category_list"));
-                            textView_genre_result.setText(x);
+                            JSONArray jsonArray = (response.getJSONArray("category_list"));
+                            for(int i= 0; i<jsonArray.length(); i++){
+                                sb.append("Label --> " +jsonArray.getJSONObject(i).getString("label"));
+                                sb.append("\nRelevance--> " + jsonArray.getJSONObject(i).getString("relevance"));
+                            }
+                            textView_genre_result.setText(sb.toString());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -123,70 +108,76 @@ public class getFile_g extends AppCompatActivity implements View.OnClickListener
         requestQueue.add(jsonobjectRequest);
     }
 
-    public void performFileSearch() {
+    public void performFileSearch()
+    {
 
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        Intent intent=new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/*");
-        startActivityForResult(intent, READ_REQUEST_CODE);
-
+        startActivityForResult(intent,READ_REQUEST_CODE);
+        //btnSummary.setEnabled(true);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getData();
-                assert uri != null;
                 path = uri.getPath();
-                assert path != null;
                 path = path.substring(path.indexOf(":") + 1);
+                // if(path.contains("emulated")){
+                //    path=path.substring(path.indexOf("0")+1);
+                // }
                 Toast.makeText(this, "" + path, Toast.LENGTH_SHORT).show();
-                  readText(path);
-                if (path != null) {
-                    btn_getGenre.setEnabled(true);
-                }
+                // tv_output.setText(readText(path));
             }
-
         }
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == PERMISSION_REQUEST_STORAGE){
-            if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-            }else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        if(requestCode== PERMISSION_REQUEST_STORAGE)
+        {
+            if(grantResults[0]== PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(this,"PERMISSION GRANTED",Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                Toast.makeText(this,"PERMISSION NOT GRANTED",Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
-    }
-    private void readText(String  input)
-    {
-        File file=new File(Environment.getExternalStorageDirectory(),input);
-        StringBuilder txt=new StringBuilder();
-        //text=new StringBuilder();
-        try{
-            BufferedReader br=new BufferedReader(new FileReader(file));
-            String line;
-            while((line=br.readLine())!=null)
-            {
-                txt.append(line);
-                txt.append("\n");
 
-            }
-            br.close();
+    }
+
+    public void getSummary(){
+
+        summaryTool.init();
+        //Toast.makeText(v.getContext(),"Extracting Sentence form file", Toast.LENGTH_SHORT).show();
+        summaryTool.extractSentenceFromContext(path);
+        //Toast.makeText(v.getContext(),"Extracting Sentence form file", Toast.LENGTH_SHORT).show();
+        summaryTool.groupSentencesIntoParagraphs();
+        summaryTool.createIntersectionMatrix();
+        summaryTool.createDictionary();
+        summaryTool.createSummary();
+        String ans = summaryTool.printSummary();
+        StringTokenizer st = new StringTokenizer(ans,".");
+
+        int count = 1;
+
+        while (st.hasMoreTokens() && count <= Integer.parseInt(numberofsent)) {
+            sb.append(count+ "->  ");
+            sb.append(st.nextToken());
+            sb.append("\n");
+            count++;
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-         text=txt.toString();
-        Log.d("myTag",text.toString());
+
+        textFromFile = sb.toString();
+
     }
 
 }

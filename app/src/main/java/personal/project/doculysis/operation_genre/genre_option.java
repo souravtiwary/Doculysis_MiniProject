@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import personal.project.doculysis.R;
 import personal.project.doculysis.getFile_g;
+import personal.project.doculysis.readappkication.Summary;
+import personal.project.doculysis.readappkication.Summary;
 
 public class genre_option extends AppCompatActivity {
 
@@ -21,7 +23,7 @@ public class genre_option extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_option);
 
-        btn_loadfileforgenreoption = findViewById(R.id.btn_urlforgenreoption);
+        btn_loadfileforgenreoption = findViewById(R.id.btn_loadfileforgenreoption);
 
         btn_loadfileforgenreoption.setOnClickListener(new View.OnClickListener() {
             @Override

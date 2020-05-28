@@ -28,10 +28,11 @@
         <activity android:name=".operation_genre.getText_g"/>
         <activity android:name=".operation_genre.getURL_g"/>
 
-        <activity android:name=".summary_option"/>
+        <activity android:name=".operations_summary.summary_option"/>
         <activity android:name=".getSummaryFromFile"/>
         <activity android:name=".operations_summary.getSummaryFromText"/>
         <activity android:name=".operations_summary.getSummaryFromurl"/>
+        <activity android:name=".readappkication.Summary"/>
 
 
     </application>

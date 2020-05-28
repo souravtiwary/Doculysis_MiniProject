@@ -1,6 +1,7 @@
-package personal.project.doculysis;
+package personal.project.doculysis.readappkication;
 
 public class Sentence {
+
     int paragraphNumber;
     int number;
     int stringLength; //Dont need this

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/b_load"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:text="Load" />
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText_togetnumber"
+        android:hint="Enter the number of sentence for summary"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/btnSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:text="Summarize" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_below="@+id/btnSummary"
+        android:id="@+id/bact_to_mainactivity"
+        android:layout_height="wrap_content"
+        android:text="BACK" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            android:id="@+id/tv_output"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Summary will appear here"
+            android:textSize="20dp"
+            android:textStyle="italic"
+            android:padding="10dp" >
+
+        </TextView>
+
+
+    </ScrollView>
+
+
+
+</LinearLayout>
