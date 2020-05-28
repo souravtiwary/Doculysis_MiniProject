@@ -17,11 +17,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.lang.reflect.Array;
 
 import personal.project.doculysis.R;
 
@@ -69,17 +66,7 @@ public class getText_g extends AppCompatActivity {
                             String x;
                             Log.d("InsideLoad", "onResponse: " + response.getString("category_list"));
                             x = (response.getString("category_list"));
-                            StringBuilder genre = new StringBuilder();
-                            JSONArray jsonArray = (response.getJSONArray("category_list"));
-                            for(int i = 0; i<jsonArray.length();i++){
-                                String label = jsonArray.getJSONObject(i).getString("label");
-                                String relevance = jsonArray.getJSONObject(i).getString("relevance");
-                                genre.append(("Label"+"->> " + label +"\nRelevence"+ "--> " + relevance ))      ;
-                                genre.append("\n\n");
-                            }
-                           //textView_genreoftext.setText((response.getJSONArray("category_list").getJSONObject(0).getString("label")));
-                            textView_genreoftext.setText(genre.toString());
-                            Log.d("jsonArray.toString()", "onResponse: "+jsonArray.toString());
+                            textView_genreoftext.setText(x);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

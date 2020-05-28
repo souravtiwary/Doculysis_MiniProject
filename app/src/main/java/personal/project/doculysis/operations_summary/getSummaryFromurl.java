@@ -48,11 +48,11 @@ public class getSummaryFromurl extends AppCompatActivity {
         btn_getsummaryfromurl_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberofsentences = editText_getnumberofsentence.getText().toString();
+                numberofsentences = editText_getnumberofsentence.toString();
 
-                url = editText_geturlforsummaryresult.getText().toString().trim();
+                url = editText_geturlforsummaryresult.toString().trim();
 
-                Toast.makeText(getSummaryFromurl.this, "Loading...",Toast.LENGTH_LONG).show();
+                Toast.makeText(getSummaryFromurl.this, "URL: "+url+"\nnumber of sentence" + numberofsentences,Toast.LENGTH_SHORT).show();
                 getSummaryFromurlfinal();
             }
         });
@@ -73,22 +73,17 @@ public class getSummaryFromurl extends AppCompatActivity {
                         try {
 
                             String x;
-
+                            Log.d("InsideLoad", "onResponse: " + response.getString("summary"));
                             x = (response.getString("summary"));
-                            x = x.replace("[...]", "");
 
-                            Log.d("InsideLoad", "onResponse: " + x);
                             StringTokenizer st = new StringTokenizer(x,".");
                             StringBuilder sb = new StringBuilder();
                             int count = 1;
 
                             while (st.hasMoreTokens() && count <= Integer.parseInt(numberofsentences)) {
-                                 //if(st.nextToken() != "["){
-                                    sb.append(count + "->  ");
-                                    sb.append(st.nextToken());
-                                    sb.append("\n");
-                                    count++;
-                                //}
+                                sb.append(count+ "->  ");
+                                sb.append(st.nextToken());
+                                sb.append("\n");
                             }
 
 

@@ -17,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,17 +65,10 @@ public class getURL_g extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
 
-                            StringBuilder genre = new StringBuilder();
-                            JSONArray jsonArray = (response.getJSONArray("category_list"));
-                            for(int i = 0; i<jsonArray.length();i++){
-
-
-                                String label = jsonArray.getJSONObject(i).getString("label");
-                                String relevance = jsonArray.getJSONObject(i).getString("relevance");
-                                genre.append(("Label"+"->> " + label +"\nRelevence"+ "--> " + relevance ))      ;
-                                genre.append("\n\n");
-                            }
-                            textView_genreofurl.setText(genre.toString());
+                            String x;
+                            Log.d("InsideLoad", "onResponse: " + response.getString("category_list"));
+                            x = (response.getString("category_list"));
+                            textView_genreofurl.setText(x);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
