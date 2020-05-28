@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        app:cardBackgroundColor="@color/cardview_light_background">
+
+        <TextView
+            android:id="@+id/get_quality_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="Get the quality of document"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_get_genre_mainA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/get_quality_textView"
+            android:layout_marginTop="50dp"
+            android:padding="18sp"
+            android:text="SELECT" />
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card1"
+        android:layout_marginTop="72dp">
+
+        <TextView
+            android:id="@+id/get_summary_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal"
+            android:text="Get the summary of document"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btn_get_summary_mainA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/get_summary_textView"
+            android:layout_marginTop="50dp"
+            android:padding="18sp"
+            android:text="SELECT" />
+
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>
