@@ -18,12 +18,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.StringTokenizer;
 
 public class getSummaryFromFile extends AppCompatActivity {
 
@@ -31,28 +40,19 @@ public class getSummaryFromFile extends AppCompatActivity {
     private EditText editText_getnumberofsentence;
     private Button btn_get_summary_result;
     private TextView textView_summary_result;
-   // private
-
-    ArrayList<Sentence> sentences, contentSummary;
-    ArrayList<Paragraph> paragraphs;
-    int noOfSentences, noOfParagraphs;
-    //FileInputStream in;
-    summary_option.SummaryTool summaryTool;
-
-    double[][] intersectionMatrix;
-    LinkedHashMap<Sentence,Double> dictionary;
 
     public String path = null;
     private static final int PERMISSION_REQUEST_STORAGE = 1000;
     private static final int READ_REQUEST_CODE = 42;
-    public String forSummary=null;
+
     String numberofsentences = null;
+    String textfromfile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getsummaryfromfile);
-        summaryTool=new summary_option.SummaryTool();
+
         btn_load_file_result_summary = findViewById(R.id.btn_load_file_result_summary);
         editText_getnumberofsentence = findViewById(R.id.editText_getnumberofsentence);
         btn_get_summary_result = findViewById(R.id.btn_get_summary_result);
@@ -66,77 +66,67 @@ public class getSummaryFromFile extends AppCompatActivity {
         btn_load_file_result_summary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberofsentences = editText_getnumberofsentence.toString();
                 performFileSearch();
-                //getSummaryFromFileFinal();
+
             }
         });
 
         btn_get_summary_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                summaryTool.init();
-                summaryTool.extractSentenceFromContext(path);
-                summaryTool.groupSentencesIntoParagraphs();
-                summaryTool.createIntersectionMatrix();
-                summaryTool.createDictionary();
-                summaryTool.createSummary();
-                String ans=summaryTool.printSummary();
-                //tv_output.setText(ans);
-                textView_summary_result.setText(ans);
-
+                numberofsentences = editText_getnumberofsentence.getText().toString();
+                getSummaryFromFileFinal();
             }
         });
 
     }
 
-//    private void getSummaryFromFileFinal() {
-//
-//        RequestQueue requestQueue;
-//        requestQueue = Volley.newRequestQueue(this);
-//
-//
-//        JsonObjectRequest jsonobjectRequest = new JsonObjectRequest(Request.Method.GET,
-//                                        "https://api.meaningcloud.com/summarization-1.0?key=86fc19c7e512d729752be51058ead27d&txt=" + forSummary + "&sentences=" +numberofsentences ,
-//                                        null,
-//                                        new Response.Listener<JSONObject>() {
-//                                            @Override
-//                                            public void onResponse(JSONObject response) {
-//                                                try {
-//
-//                                                    String x;
-//                                                    Log.d("InsideLoad", "onResponse: " + response.getString("summary"));
-//                                                    x = (response.getString("summary"));
-//
-//                                                    StringTokenizer st = new StringTokenizer(x,".");
-//                                                    StringBuilder sb = new StringBuilder();
-//                                                    int count = 1;
-//
-//                                                    while (st.hasMoreTokens() && count <= Integer.parseInt(numberofsentences)) {
-//                                                        sb.append(count+ "->");
-//                                                        sb.append(st.nextToken());
-//                                                        sb.append("\n");
-//                            }
-//
-//
-//                            textView_summary_result.setText(sb.toString());
-//
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("getFileForSummary", "onErrorResponse: " + error.getMessage());
-//                Toast.makeText(getSummaryFromFile.this, "Something went wrong :(", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        requestQueue.add(jsonobjectRequest);
-//
-//    }
+    private void getSummaryFromFileFinal() {
+
+        RequestQueue requestQueue;
+        requestQueue = Volley.newRequestQueue(this);
+
+
+        JsonObjectRequest jsonobjectRequest = new JsonObjectRequest(Request.Method.GET,
+                "https://api.meaningcloud.com/summarization-1.0?key=86fc19c7e512d729752be51058ead27d&txt=" + textfromfile + "&sentences=" +numberofsentences ,
+                                        null,
+                                        new Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+                                                try {
+                                                    String x;
+                                                    Log.d("InsideLoad", "onResponse: " + response.getString("summary"));
+                                                    x = (response.getString("summary"));
+                                                    x = x.replace("[...]", "");
+
+                                                    StringTokenizer st = new StringTokenizer(x,".");
+                                                    StringBuilder sb = new StringBuilder();
+                                                    int count = 1;
+                                                    while (st.hasMoreTokens() && count <= Integer.parseInt(numberofsentences)) {
+                                                        sb.append(count+ "->");
+                                                        sb.append(st.nextToken());
+                                                        sb.append("\n");
+                            }
+
+
+                            textView_summary_result.setText(sb.toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("getFileForSummary", "onErrorResponse: " + error.getMessage());
+                Toast.makeText(getSummaryFromFile.this, "Something went wrong :(", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        requestQueue.add(jsonobjectRequest);
+
+    }
 
     public void performFileSearch() {
 
@@ -159,9 +149,10 @@ public class getSummaryFromFile extends AppCompatActivity {
                 assert path != null;
                 path = path.substring(path.indexOf(":") + 1);
                 Toast.makeText(this, "" + path, Toast.LENGTH_SHORT).show();
-                readText(path);
+
                 if (path != null) {
                     btn_get_summary_result.setEnabled(true);
+                    readText(path);
                 }
             }
 
@@ -181,28 +172,29 @@ public class getSummaryFromFile extends AppCompatActivity {
         }
     }
 
-    private void readText(String  input)
-    {
-        File file=new File(Environment.getExternalStorageDirectory(),input);
-        StringBuilder txt=new StringBuilder();
-        //text=new StringBuilder();
-        try{
-            BufferedReader br=new BufferedReader(new FileReader(file));
+    private void readText(String path){
+
+        File file =  new File(Environment.getExternalStorageDirectory(), path);
+        StringBuilder sb = new StringBuilder();
+        try {
+            BufferedReader br  = new BufferedReader(new FileReader(file));
             String line;
-            while((line=br.readLine())!=null)
-            {
-                txt.append(line);
-                txt.append("\n");
+            while ((line = br.readLine()) != null){
+                sb.append(line);
+                sb.append(" ");
 
             }
             br.close();
-        }
-        catch (IOException e)
-        {
+        }catch (IOException e){
             e.printStackTrace();
         }
-        forSummary=txt.toString();
-        Log.d("myTag",forSummary.toString());
+        textfromfile = sb.toString();
+        Log.d("readText", "readText: " + textfromfile);
+
     }
+
+
+
+
 
 }

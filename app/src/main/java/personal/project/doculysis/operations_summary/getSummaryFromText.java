@@ -31,7 +31,7 @@ public  class getSummaryFromText extends AppCompatActivity {
     private Button btn_getsummaryfromtext_result;
     private TextView textView_summaryoftext;
 
-    String url = null;
+    String text = null;
     String numberofsentences = null;
 
     @Override
@@ -47,11 +47,11 @@ public  class getSummaryFromText extends AppCompatActivity {
         btn_getsummaryfromtext_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberofsentences = editText_getnumberofsentence.toString();
+                numberofsentences = editText_getnumberofsentence.getText().toString();
 
-                url = editText_gettextforsummaryresult.toString().trim();
+                text = editText_gettextforsummaryresult.getText().toString().trim();
 
-                Toast.makeText(getSummaryFromText.this, "URL: " + url + "\nnumber of sentence" + numberofsentences, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSummaryFromText.this, "Loading...." + numberofsentences, Toast.LENGTH_LONG).show();
                 getSummaryFromurlfinal();
             }
         });
@@ -64,7 +64,7 @@ public  class getSummaryFromText extends AppCompatActivity {
 
 
         JsonObjectRequest jsonobjectRequest = new JsonObjectRequest(Request.Method.GET,
-                "https://api.meaningcloud.com/summarization-1.0?key=86fc19c7e512d729752be51058ead27d&url=" + url + "&sentences=" + numberofsentences,
+                "https://api.meaningcloud.com/summarization-1.0?key=86fc19c7e512d729752be51058ead27d&txt=" + text + "&sentences=" + numberofsentences,
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -74,6 +74,7 @@ public  class getSummaryFromText extends AppCompatActivity {
                             String x;
                             Log.d("InsideLoad", "onResponse: " + response.getString("summary"));
                             x = (response.getString("summary"));
+                            x = x.replace("[...]", "");
 
                             StringTokenizer st = new StringTokenizer(x, ".");
                             StringBuilder sb = new StringBuilder();
@@ -83,6 +84,7 @@ public  class getSummaryFromText extends AppCompatActivity {
                                 sb.append(count + "->  ");
                                 sb.append(st.nextToken());
                                 sb.append("\n");
+                                count++;
                             }
 
 
