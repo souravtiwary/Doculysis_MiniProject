@@ -1,44 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:id="@+id/editText_gettextforsummaryresult"
-        android:hint="Enter text to get the summary"
-        android:inputType="text"/>
+        android:orientation="vertical">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:id="@+id/editText_getnumberofsentence"
-        android:hint="Enter number of sentence for summary"
-        android:inputType="number"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_getsummaryfromtext_result"
-        android:text="click here to get summary"/>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Summary will appear here..."
-            android:textSize="20dp"
-            android:textStyle="italic"
-            android:id="@+id/textView_summaryoftext"/>
+            android:padding="20dp"
+            android:id="@+id/editText_gettextforsummaryresult"
+            android:hint="Enter text to get the summary"
+            android:inputType="text"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:id="@+id/editText_getnumberofsentence"
+            android:hint="Enter number of sentence for summary"
+            android:inputType="number"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_getsummaryfromtext_result"
+            android:text="click here to get summary"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Summary will appear here..."
+                android:textSize="20dp"
+                android:textStyle="italic"
+                android:id="@+id/textView_summaryoftext"/>
+
+        </ScrollView>
+
+    </LinearLayout>
 
 
 
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>

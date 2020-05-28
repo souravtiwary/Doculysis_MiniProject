@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class getSummaryFromFile extends AppCompatActivity {
@@ -41,6 +46,7 @@ public class getSummaryFromFile extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
 
     String numberofsentences = null;
+    String textfromfile = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +66,15 @@ public class getSummaryFromFile extends AppCompatActivity {
         btn_load_file_result_summary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberofsentences = editText_getnumberofsentence.toString();
                 performFileSearch();
+
+            }
+        });
+
+        btn_get_summary_result.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                numberofsentences = editText_getnumberofsentence.getText().toString();
                 getSummaryFromFileFinal();
             }
         });
@@ -75,21 +88,20 @@ public class getSummaryFromFile extends AppCompatActivity {
 
 
         JsonObjectRequest jsonobjectRequest = new JsonObjectRequest(Request.Method.GET,
-                                        "https://api.meaningcloud.com/summarization-1.0?key=86fc19c7e512d729752be51058ead27d&doc=" + path + "&sentences=" +numberofsentences ,
+                "https://api.meaningcloud.com/summarization-1.0?key=86fc19c7e512d729752be51058ead27d&txt=" + textfromfile + "&sentences=" +numberofsentences ,
                                         null,
                                         new Response.Listener<JSONObject>() {
                                             @Override
                                             public void onResponse(JSONObject response) {
                                                 try {
-
                                                     String x;
                                                     Log.d("InsideLoad", "onResponse: " + response.getString("summary"));
                                                     x = (response.getString("summary"));
+                                                    x = x.replace("[...]", "");
 
                                                     StringTokenizer st = new StringTokenizer(x,".");
                                                     StringBuilder sb = new StringBuilder();
                                                     int count = 1;
-
                                                     while (st.hasMoreTokens() && count <= Integer.parseInt(numberofsentences)) {
                                                         sb.append(count+ "->");
                                                         sb.append(st.nextToken());
@@ -140,6 +152,7 @@ public class getSummaryFromFile extends AppCompatActivity {
 
                 if (path != null) {
                     btn_get_summary_result.setEnabled(true);
+                    readText(path);
                 }
             }
 
@@ -158,6 +171,30 @@ public class getSummaryFromFile extends AppCompatActivity {
             }
         }
     }
+
+    private void readText(String path){
+
+        File file =  new File(Environment.getExternalStorageDirectory(), path);
+        StringBuilder sb = new StringBuilder();
+        try {
+            BufferedReader br  = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = br.readLine()) != null){
+                sb.append(line);
+                sb.append(" ");
+
+            }
+            br.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        textfromfile = sb.toString();
+        Log.d("readText", "readText: " + textfromfile);
+
+    }
+
+
+
 
 
 }

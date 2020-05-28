@@ -50,13 +50,10 @@ public class getFile_g extends AppCompatActivity implements View.OnClickListener
         btn_loadFile.setOnClickListener(this);
 
         btn_getGenre = findViewById(R.id.btn_get_genre_result);
+        btn_getGenre.setOnClickListener(this);
 
         textView_genre_result = findViewById(R.id.textView_genre_result);
     }
-
-
-
-
 
     @Override
     public void onClick(View v) {
