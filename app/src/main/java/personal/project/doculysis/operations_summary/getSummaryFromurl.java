@@ -48,11 +48,11 @@ public class getSummaryFromurl extends AppCompatActivity {
         btn_getsummaryfromurl_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                numberofsentences = editText_getnumberofsentence.toString();
+                numberofsentences = editText_getnumberofsentence.getText().toString();
 
-                url = editText_geturlforsummaryresult.toString().trim();
+                url = editText_geturlforsummaryresult.getText().toString().trim();
 
-                Toast.makeText(getSummaryFromurl.this, "URL: "+url+"\nnumber of sentence" + numberofsentences,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getSummaryFromurl.this, "URL is added to the app wait for moment... ",Toast.LENGTH_SHORT).show();
                 getSummaryFromurlfinal();
             }
         });
@@ -75,6 +75,7 @@ public class getSummaryFromurl extends AppCompatActivity {
                             String x;
                             Log.d("InsideLoad", "onResponse: " + response.getString("summary"));
                             x = (response.getString("summary"));
+                            x =  x.replace("[...]", " ");
 
                             StringTokenizer st = new StringTokenizer(x,".");
                             StringBuilder sb = new StringBuilder();
@@ -84,6 +85,7 @@ public class getSummaryFromurl extends AppCompatActivity {
                                 sb.append(count+ "->  ");
                                 sb.append(st.nextToken());
                                 sb.append("\n");
+                                count++;
                             }
 
 
