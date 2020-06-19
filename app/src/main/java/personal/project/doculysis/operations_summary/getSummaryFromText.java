@@ -1,5 +1,7 @@
 package personal.project.doculysis.operations_summary;
 
+
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +22,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 import personal.project.doculysis.R;
+import personal.project.doculysis.getFile_g;
 
 public  class getSummaryFromText extends AppCompatActivity {
 
@@ -31,11 +35,14 @@ public  class getSummaryFromText extends AppCompatActivity {
     private Button btn_getsummaryfromtext_result;
     private TextView textView_summaryoftext;
 
+    ProgressDialog progress;
+
     String textforsummary = null;
     String numberofsentences = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Summary");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getsummaryfromtext);
 
@@ -47,6 +54,9 @@ public  class getSummaryFromText extends AppCompatActivity {
         btn_getsummaryfromtext_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progress=new ProgressDialog(getSummaryFromText.this);
+                progress.setMessage("Loading....");
+                progress.show();
                 numberofsentences = editText_getnumberofsentence.getText().toString();
 
                 textforsummary = editText_gettextforsummaryresult.getText().toString().trim();
@@ -88,6 +98,7 @@ public  class getSummaryFromText extends AppCompatActivity {
 
 
                             textView_summaryoftext.setText(sb.toString());
+                            progress.dismiss();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

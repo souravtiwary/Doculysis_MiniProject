@@ -16,23 +16,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".operation_genre.genre_option"/>
-        <activity android:name=".getFile_g"/>
-        <activity android:name=".operation_genre.getText_g"/>
-        <activity android:name=".operation_genre.getURL_g"/>
-
-        <activity android:name=".operations_summary.summary_option"/>
-        <activity android:name=".getSummaryFromFile"/>
-        <activity android:name=".operations_summary.getSummaryFromText"/>
-        <activity android:name=".operations_summary.getSummaryFromurl"/>
-        <activity android:name=".readappkication.Summary"/>
+        <activity android:name=".MainActivity"/>
+        <activity
+            android:name=".operation_genre.genre_option"
+            android:label="Genre" />
+        <activity
+            android:name=".getFile_g"
+            android:label="Genre" />
+        <activity
+            android:name=".operation_genre.getText_g"
+            android:label="Genre" />
+        <activity
+            android:name=".operation_genre.getURL_g"
+            android:label="Genre" />
+        <activity
+            android:name=".operations_summary.summary_option"
+            android:label="Summary" />
+        <activity
+            android:name=".operations_summary.getSummaryFromText"
+            android:label="Summary" />
+        <activity
+            android:name=".operations_summary.getSummaryFromurl"
+            android:label="Summary" />
+        <activity
+            android:name=".textreadingfromfile.Summary"
+            android:label="Summary" />
 
 
     </application>

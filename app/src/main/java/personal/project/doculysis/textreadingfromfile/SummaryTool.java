@@ -1,7 +1,5 @@
-package personal.project.doculysis.readappkication;
-import android.content.Context;
+package personal.project.doculysis.textreadingfromfile;
 import android.os.Environment;
-import android.widget.Toast;
 
 import java.io.*;
 import java.util.ArrayList;

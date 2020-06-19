@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Objects;
+
 import personal.project.doculysis.operation_genre.genre_option;
 import personal.project.doculysis.operations_summary.summary_option;
 
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -31,10 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_get_summary_mainA:
+
                 startActivity(new Intent(MainActivity.this, summary_option.class));
 
                 break;
             case R.id.btn_get_genre_mainA:
+
                 startActivity(new Intent(MainActivity.this, genre_option.class));
                 break;
         }

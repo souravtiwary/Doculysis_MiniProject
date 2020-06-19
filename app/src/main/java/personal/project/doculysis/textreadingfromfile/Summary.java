@@ -1,4 +1,4 @@
-package personal.project.doculysis.readappkication;
+package personal.project.doculysis.textreadingfromfile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,17 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.File;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Objects;
 import java.util.StringTokenizer;
-;
-
 import personal.project.doculysis.MainActivity;
 import personal.project.doculysis.R;
 
@@ -49,6 +45,7 @@ public class Summary extends AppCompatActivity {
     public String path = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Summary");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_readapp);
 

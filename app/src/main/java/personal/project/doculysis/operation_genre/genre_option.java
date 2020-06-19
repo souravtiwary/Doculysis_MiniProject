@@ -7,10 +7,10 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+
 import personal.project.doculysis.R;
 import personal.project.doculysis.getFile_g;
-import personal.project.doculysis.readappkication.Summary;
-import personal.project.doculysis.readappkication.Summary;
 
 public class genre_option extends AppCompatActivity {
 
@@ -20,6 +20,7 @@ public class genre_option extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Type of Document");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_option);
 

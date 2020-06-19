@@ -1,6 +1,7 @@
 package personal.project.doculysis;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +26,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
 import java.util.StringTokenizer;
 
-import personal.project.doculysis.readappkication.Summary;
-import personal.project.doculysis.readappkication.SummaryTool;
+import personal.project.doculysis.operation_genre.getText_g;
+import personal.project.doculysis.textreadingfromfile.SummaryTool;
 
 public class getFile_g extends AppCompatActivity  {
 
@@ -35,6 +38,7 @@ public class getFile_g extends AppCompatActivity  {
     private Button btn_get_genre_result;
     private TextView textView_genre_result;
     SummaryTool summaryTool = new SummaryTool();
+    ProgressDialog progress;
 
     String textFromFile =null;
     StringBuilder sb = new StringBuilder();
@@ -46,8 +50,11 @@ public class getFile_g extends AppCompatActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Type of Document");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getgenrefromfile);
+
+
 
         btn_get_genre_result = findViewById(R.id.btn_get_genre_result);
         btn_load_file_result_g = findViewById(R.id.btn_load_file_result_g);
@@ -63,6 +70,9 @@ public class getFile_g extends AppCompatActivity  {
         btn_get_genre_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progress=new ProgressDialog(getFile_g.this);
+                progress.setMessage("Loading....");
+                progress.show();
                 getSummary();
                 getGenreofFile();
             }
@@ -83,15 +93,18 @@ public class getFile_g extends AppCompatActivity  {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-
                             StringBuilder sb = new StringBuilder();
                             Log.d("InsideLoad", "onResponse: " + response.getString("category_list"));
                             JSONArray jsonArray = (response.getJSONArray("category_list"));
                             for(int i= 0; i<jsonArray.length(); i++){
-                                sb.append("Label --> " +jsonArray.getJSONObject(i).getString("label"));
-                                sb.append("\nRelevance--> " + jsonArray.getJSONObject(i).getString("relevance"));
+                                sb.append("Label --> ").append(jsonArray.getJSONObject(i).getString("label")).append("\n");
+                                sb.append("Relevance--> ").append(jsonArray.getJSONObject(i).getString("relevance"));
+                                sb.append("\n\n");
                             }
                             textView_genre_result.setText(sb.toString());
+
+                            progress.dismiss();
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -157,9 +170,7 @@ public class getFile_g extends AppCompatActivity  {
     public void getSummary(){
 
         summaryTool.init();
-        //Toast.makeText(v.getContext(),"Extracting Sentence form file", Toast.LENGTH_SHORT).show();
         summaryTool.extractSentenceFromContext(path);
-        //Toast.makeText(v.getContext(),"Extracting Sentence form file", Toast.LENGTH_SHORT).show();
         summaryTool.groupSentencesIntoParagraphs();
         summaryTool.createIntersectionMatrix();
         summaryTool.createDictionary();

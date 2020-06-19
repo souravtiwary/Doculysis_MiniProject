@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bb"
     tools:context=".MainActivity">
 
 
@@ -13,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        app:cardBackgroundColor="@color/cardview_light_background">
+        app:cardBackgroundColor="#FFFFFF">
 
         <TextView
             android:id="@+id/get_quality_textView"
@@ -21,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
-            android:text="Get the quality of document"
+            android:text="Get the Genre/Type of document"
             android:textSize="20sp" />
 
         <Button

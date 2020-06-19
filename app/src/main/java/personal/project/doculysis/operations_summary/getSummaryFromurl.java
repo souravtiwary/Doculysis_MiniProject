@@ -1,5 +1,6 @@
 package personal.project.doculysis.operations_summary;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,10 +21,11 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 import personal.project.doculysis.R;
-import personal.project.doculysis.getSummaryFromFile;
+import personal.project.doculysis.getFile_g;
 
 public class getSummaryFromurl extends AppCompatActivity {
 
@@ -32,11 +34,14 @@ public class getSummaryFromurl extends AppCompatActivity {
     private Button btn_getsummaryfromurl_result;
     private TextView textView_summaryofurl;
 
+    ProgressDialog progress;
+
     String url = null;
     String numberofsentences = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Summary");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getsummaryfromurl);
 
@@ -48,6 +53,9 @@ public class getSummaryFromurl extends AppCompatActivity {
         btn_getsummaryfromurl_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progress=new ProgressDialog(getSummaryFromurl.this);
+                progress.setMessage("Loading....");
+                progress.show();
                 numberofsentences = editText_getnumberofsentence.getText().toString();
 
                 url = editText_geturlforsummaryresult.getText().toString().trim();
@@ -90,6 +98,7 @@ public class getSummaryFromurl extends AppCompatActivity {
 
 
                             textView_summaryofurl.setText(sb.toString());
+                            progress.dismiss();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

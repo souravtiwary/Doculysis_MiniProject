@@ -7,8 +7,10 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+
 import personal.project.doculysis.R;
-import personal.project.doculysis.readappkication.Summary;
+import personal.project.doculysis.textreadingfromfile.Summary;
 
 public class summary_option extends AppCompatActivity {
 
@@ -18,6 +20,7 @@ public class summary_option extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Summary");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary_option);
 

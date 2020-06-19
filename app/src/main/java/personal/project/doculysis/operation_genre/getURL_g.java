@@ -1,5 +1,7 @@
 package personal.project.doculysis.operation_genre;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import personal.project.doculysis.R;
 import personal.project.doculysis.getFile_g;
 
@@ -29,11 +33,13 @@ public class getURL_g extends AppCompatActivity {
     private Button btn_getgenrefromurl_result;
     private EditText editText_geturlforgenreresult;
     private TextView textView_genreofurl;
+    ProgressDialog progress;
 
     String url = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Type of Document");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getgenrefromurl);
 
@@ -44,6 +50,9 @@ public class getURL_g extends AppCompatActivity {
         btn_getgenrefromurl_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progress=new ProgressDialog(getURL_g.this);
+                progress.setMessage("Loading....");
+                progress.show();
                 url = editText_geturlforgenreresult.getText().toString().trim();
                 Toast.makeText(getURL_g.this,"URL: " + url, Toast.LENGTH_SHORT).show();
                 getGenreFromUrl();
@@ -67,13 +76,23 @@ public class getURL_g extends AppCompatActivity {
                         try {
                             StringBuilder sb = new StringBuilder();
                             Log.d("InsideLoad", "onResponse: " + response.getString("category_list"));
-                            JSONArray jsonArray = (response.getJSONArray("category_list"));
-                            for(int i= 0; i<jsonArray.length(); i++){
-                                sb.append("Label --> " +jsonArray.getJSONObject(i).getString("label")+"\n");
-                                sb.append("Relevance--> " + jsonArray.getJSONObject(i).getString("relevance"));
-                                sb.append("\n\n");
+
+                            JSONArray jsonArray = response.getJSONArray("category_list");
+                            if(jsonArray.length()==0){
+                                String s = "Grenre of the url cannot be generated\n" +
+                                        "Possible reason: \n" +
+                                        "1. Url is not proper\n" + "2. There might be less text in the url and more image as such...";
+                                textView_genreofurl.setText(s);
                             }
-                            textView_genreofurl.setText(sb.toString());
+                            else {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    sb.append("Label --> " + jsonArray.getJSONObject(i).getString("label") + "\n");
+                                    sb.append("Relevance--> " + jsonArray.getJSONObject(i).getString("relevance"));
+                                    sb.append("\n\n");
+                                }
+                                textView_genreofurl.setText(sb.toString());
+                                progress.dismiss();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -5,13 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
     android:orientation="vertical"
+    android:background="@drawable/bb"
     tools:context=".operation_genre.genre_option">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:layout_marginStart="0sp"
+        android:textSize="25dp"
+        android:textColor="#0E0E0E"
         android:layout_marginTop="20dp"
         android:text="Choose anyone of the following:"/>
 

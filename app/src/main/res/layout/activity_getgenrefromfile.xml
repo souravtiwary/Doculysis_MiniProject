@@ -4,7 +4,10 @@
     android:orientation="vertical"
     tools:context=".getFile_g"
     android:layout_width="match_parent"
+    android:background="@drawable/bb"
     android:layout_height="match_parent">
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,6 +47,18 @@
             android:textStyle="italic"
             android:id="@+id/textView_genre_result"/>
 
+
+
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_centerHorizontal="true" />
+
 
 </LinearLayout>
